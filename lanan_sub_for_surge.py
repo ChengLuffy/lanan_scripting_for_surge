@@ -19,7 +19,7 @@ for ele in arr:
     json_str = base64.b64decode(ele).decode("utf-8")
     if len(json_str) != 0 :    
         dict = json.loads(json_str)
-        str = "%s = vmess, %s, %s, username=%s, tfo=true, tls=%s\n" % (dict["ps"], dict["add"], dict["port"], dict["id"], "true" if dict["tls"] == "tls" else "false")
+        str = "%s = vmess, %s, %s, username=%s, tls=%s\n" % (dict["ps"], dict["add"], dict["port"], dict["id"], "true" if dict["tls"] == "tls" else "false")
         ret += str
 
 with open(FILE_PATH, 'wt') as f:
