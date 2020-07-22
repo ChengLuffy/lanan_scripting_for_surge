@@ -20,14 +20,15 @@ ret = "#%s\n" % (time.asctime( time.localtime(time.time()) ))
 for ele in arr:
     if ele.startswith('vmess'):
         json_str = base64.b64decode(ele.split('vmess://')[-1]).decode("utf-8")
-        if len(json_str) != 0 :    
+        if len(json_str) != 0 :
             dict = json.loads(json_str)
-            if "x" in dict["ps"]:
+            ws = ''
+            if str(dict['net']) == "ws":
+                ws = ', ws=true, ws-path=%s' % (dict['path'])
                 pass
-            else:
-                str = "%s = vmess, %s, %s, username=%s, tls=%s\n" % (dict["ps"], dict["add"], dict["port"], dict["id"], "true" if dict["tls"] == "tls" else "false")
-                ret += str
-                pass
+            item = "%s = vmess, %s, %s, username=%s, tls=%s%s\n" % (dict["ps"], dict["add"], dict["port"], dict["id"], "true" if dict["tls"] == "tls" else "false", ws)
+            ret += item
+            pass
         pass
     elif ele.startswith('trojan'):
         trojanInfo = parse.urlparse(ele)
@@ -38,8 +39,8 @@ for ele in arr:
         server = serverInfo[0]
         port = serverInfo[1]
         name = trojanInfo.fragment.replace("\r", "")
-        str = "%s = trojan, %s, %s, password=%s\n" % (unquote(name, 'utf-8'), server, port, password)
-        ret += str
+        item = "%s = trojan, %s, %s, password=%s\n" % (unquote(name, 'utf-8'), server, port, password)
+        ret += item
         pass
 
 with open(FILE_PATH, 'wt') as f:
